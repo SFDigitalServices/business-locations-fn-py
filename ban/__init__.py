@@ -65,14 +65,17 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             print(f"response: {response}")
             response.raise_for_status()
 
-            # map field names
-            mapped_json = {}
+            # map field names for each result
             resp_json = response.json()
             print(f"resp_json: {resp_json}")
-            for ban_field, socrata_field in ban_map.items():
-                mapped_json[ban_field] = resp_json.get(socrata_field, "")
+            mapped_results = []
+            for result in resp_json:
+                mapped_result = {}
+                for ban_field, socrata_field in ban_map.items():
+                    mapped_result[ban_field] = result.get(socrata_field, "")
+                mapped_results.append(mapped_result)
 
-            response.text = json.dumps(mapped_json)
+            response.text = json.dumps(mapped_results)
 
         else:
             response = common.get_http_response_by_status(200)
