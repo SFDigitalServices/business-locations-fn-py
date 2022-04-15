@@ -75,7 +75,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     mapped_result[ban_field] = result.get(socrata_field, "")
                 mapped_results.append(mapped_result)
 
-            response.text = json.dumps(mapped_results)
+            # pylint: disable=protected-access
+            response._content = json.dumps(mapped_results).encode('utf8')
 
         else:
             response = common.get_http_response_by_status(200)
