@@ -9,23 +9,28 @@ import azure.functions as func
 from requests.models import Response
 from shared_code import common
 
-# map socrata fieldnames to existing ban lookup fieldnames
+# map existing ban lookup fieldnames to socrata fieldnames
 ban_map = {
-    "ban": "BAN",
-    "owners": "OWNERS",
-    "businessname": "BusinessName",
-    "dbaname": "DBAName",
-    "streetaddress": "StreetAddress",
-    "city": "City",
-    "state": "State",
-    "postalcd": "PostalCd",
-    "lin": "LIN",
-    "busstartdate": "BusstartDate",
-    "locstartdate": "2019-08-14T00:00:00.000",
-    "mailingaddress": "580 4TH ST",
-    "mailcitystatezip": "SAN FRANCISCO CA 94107-",
-    "locationnumber": "226",
-    "orgtype": "C-Corp"
+    "BAN": "ban",
+    "OWNERS": "owners",
+    "BusinessName": "businessname",
+    "DBAName": "dbaname",
+    "StreetAddress": "streetaddress",
+    "City": "city",
+    "State": "state",
+    "PostalCd": "postalcd",
+    "LIN": "lin",
+    "BusstartDate": "busstartdate",
+    "BusEndDate": "busenddate",
+    "LocstartDate": "locstartdate",
+    "LocEndDate": "locenddate",
+    "MailingAddress": "mailingaddress",
+    "MailCityStateZip": "mailcitystatezip",
+    "LocationNumber": "locationnumber",
+    "OrgType": "orgtype",
+    "MailZip": "postalcd",
+    "MailState": "state",
+    "MailCity": "city"
 }
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -46,8 +51,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             if "BAN" not in req_json:
                 raise ValueError("Missing BAN parameter")
 
+            # query socrata
             params["BAN"] = req_json.get("BAN")
-
             response = requests.get(
                 os.getenv('BAN_API_URL'),
                 headers={
@@ -59,6 +64,15 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
             print(f"response: {response}")
             response.raise_for_status()
+
+            # map field names
+            mapped_json = {}
+            resp_json = response.json()
+            print(f"resp_json: {resp_json}")
+            for ban_field, socrata_field in ban_map.items():
+                mapped_json[ban_field] = resp_json.get(socrata_field, "")
+
+            response.text = json.dumps(mapped_json)
 
         else:
             response = common.get_http_response_by_status(200)
