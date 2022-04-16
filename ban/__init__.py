@@ -33,6 +33,10 @@ ban_map = {
     "MailCity": "city"
 }
 
+headers = {
+    "Access-Control-Allow-Origin": "*"
+}
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
     """ main function for ban """
     logging.info('Status processed a request.')
@@ -75,16 +79,14 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     mapped_result[ban_field] = result.get(socrata_field, "")
                 mapped_results.append(mapped_result)
 
-            # pylint: disable=protected-access
-            response._content = json.dumps(mapped_results).encode('utf8')
-
-            return response
+            return func.HttpResponse(
+                json.dumps(mapped_results),
+                status_code=200,
+                mimetype="application/json",
+                headers=headers
+            )
 
         response = common.get_http_response_by_status(200)
-
-        headers = {
-            "Access-Control-Allow-Origin": "*"
-        }
         return common.func_json_response(response, headers, "message")
 
     #pylint: disable=broad-except
