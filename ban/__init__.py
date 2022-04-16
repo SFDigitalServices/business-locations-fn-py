@@ -78,8 +78,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             # pylint: disable=protected-access
             response._content = json.dumps(mapped_results).encode('utf8')
 
-        else:
-            response = common.get_http_response_by_status(200)
+            return response
+
+        response = common.get_http_response_by_status(200)
 
         headers = {
             "Access-Control-Allow-Origin": "*"
