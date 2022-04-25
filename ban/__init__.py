@@ -27,10 +27,7 @@ ban_map = {
     "MailingAddress": "mailingaddress",
     "MailCityStateZip": "mailcitystatezip",
     "LocationNumber": "locationnumber",
-    "OrgType": "orgtype",
-    "MailZip": "postalcd",
-    "MailState": "state",
-    "MailCity": "city"
+    "OrgType": "orgtype"
 }
 
 headers = {
