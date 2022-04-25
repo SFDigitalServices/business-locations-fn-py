@@ -57,8 +57,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             response = requests.get(
                 os.getenv('BAN_API_URL'),
                 headers={
-                    'Authorization': 'Basic ' + os.getenv('ADDRESS_SVC_AUTH_API_KEY'),
-                    'X-App-Token': os.getenv('ADDRESS_SVC_APP_TOKEN')
+                    'Authorization': 'Basic ' + os.getenv('BAN_API_AUTH_API_KEY'),
+                    'X-App-Token': os.getenv('BAN_API_APP_TOKEN')
                 },
                 params=params
             )
