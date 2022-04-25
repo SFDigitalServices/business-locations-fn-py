@@ -5,6 +5,7 @@ import logging
 import traceback
 import requests
 import jsend
+from dateutil import parser
 import azure.functions as func
 from requests.models import Response
 from shared_code import common
@@ -73,7 +74,14 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             for result in resp_json:
                 mapped_result = {}
                 for ban_field, socrata_field in ban_map.items():
-                    mapped_result[ban_field] = result.get(socrata_field, "")
+                    val = result.get(socrata_field, "")
+
+                    # date formatting MM-DD-YYYY
+                    if val and ban_field.lower().endswith('date'):
+                        the_date = parser.parse(val)
+                        val = the_date.strftime('%m-%d-%Y')
+
+                    mapped_result[ban_field] = val
                 mapped_results.append(mapped_result)
 
             return func.HttpResponse(
