@@ -63,7 +63,7 @@ Manually managing azure-functions-worker may cause unexpected issues
 
 ### Testing and Code Coverage
 Code coverage command with missing statement line numbers  
-> $ pipenv run python -m pytest --cov --cov-report term-missing
+> $ pipenv run python -m pytest -s --cov --cov-report term-missing
 
 ### Prec-commit
 Set up git hook scripts with pre-commit
