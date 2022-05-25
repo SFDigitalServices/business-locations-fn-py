@@ -10,25 +10,25 @@ import azure.functions as func
 from requests.models import Response
 from shared_code import common
 
-# map existing ban lookup fieldnames to socrata fieldnames
+# map socrata fieldnames to existing ban lookup fieldnames
 ban_map = {
-    "BAN": "ban",
-    "OWNERS": "owners",
-    "BusinessName": "businessname",
-    "DBAName": "dbaname",
-    "StreetAddress": "streetaddress",
-    "City": "city",
-    "State": "state",
-    "PostalCd": "postalcd",
-    "LIN": "lin",
-    "BusstartDate": "busstartdate",
-    "BusEndDate": "busenddate",
-    "LocstartDate": "locstartdate",
-    "LocEndDate": "locenddate",
-    "MailingAddress": "mailingaddress",
-    "MailCityStateZip": "mailcitystatezip",
-    "LocationNumber": "locationnumber",
-    "OrgType": "orgtype"
+    "ban": "BAN",
+    "owners": "OWNERS",
+    "businessname": "BusinessName",
+    "dbaname": "DBAName",
+    "streetaddress": "StreetAddress",
+    "city": "City",
+    "state": "State",
+    "postalcd": "PostalCd",
+    "lin": "LIN",
+    "busstartdate": "BusstartDate",
+    "busenddate": "BusEndDate",
+    "locstartdate": "LocstartDate",
+    "locenddate": "LocEndDate",
+    "mailingaddress": "MailingAddress",
+    "mailcitystatezip": "MailCityStateZip",
+    "locationnumber": "LocationNumber",
+    "orgtype": "OrgType"
 }
 
 headers = {
@@ -73,15 +73,24 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             mapped_results = []
             for result in resp_json:
                 mapped_result = {}
-                for ban_field, socrata_field in ban_map.items():
-                    val = result.get(socrata_field, "")
+
+                for field, value in result.items():
+                    if field in ban_map:
+                        field = ban_map.get(field)
 
                     # date formatting MM-DD-YYYY
-                    if val and ban_field.lower().endswith('date'):
-                        the_date = parser.parse(val)
-                        val = the_date.strftime('%m-%d-%Y')
+                    if value and field.lower().endswith('date'):
+                        the_date = parser.parse(value)
+                        value = the_date.strftime('%m-%d-%Y')
 
-                    mapped_result[ban_field] = val
+                    mapped_result[field] = value
+
+                # add missing items
+                # socrata will not return fields which have null values
+                for field in ban_map.values():
+                    if field not in mapped_result:
+                        mapped_result[field] = ""
+
                 mapped_results.append(mapped_result)
 
             return func.HttpResponse(
