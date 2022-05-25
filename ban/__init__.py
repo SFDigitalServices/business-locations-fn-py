@@ -31,6 +31,10 @@ ban_map = {
     "orgtype": "OrgType"
 }
 
+headers = {
+    "Access-Control-Allow-Origin": "*"
+}
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
     """ main function for ban """
     logging.info('Status processed a request.')
@@ -93,17 +97,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 json.dumps(mapped_results),
                 status_code=200,
                 mimetype="application/json",
-                headers={
-                    "Access-Control-Allow-Origin": "*"
-                }
+                headers=headers
             )
 
         response = common.get_http_response_by_status(200)
-        return common.func_json_response(
-            response,
-            {"Access-Control-Allow-Origin": "*"},
-            "message"
-        )
+        return common.func_json_response(response, headers, "message")
 
     #pylint: disable=broad-except
     except Exception as err:
