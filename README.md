@@ -4,6 +4,10 @@ Azure serverless python function microservice template
 ## `api/status/http`
 Query http status of the serverless function.
 
+## `api/ban`
+Post endpoint with required BAN parameter.
+Queries for locations by BAN.
+
 ### Query
 Example
 ```

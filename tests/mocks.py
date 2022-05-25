@@ -16,7 +16,16 @@ SOCRATA_RESPONSE = [
         "mailingaddress": "580 MAIN ST",
         "mailcitystatezip": "SAN FRANCISCO CA 11111",
         "locationnumber": "111",
-        "orgtype": "C-Corp"
+        "orgtype": "C-Corp",
+        "licclasscodes": "D03 D19 D39",
+        "fyfind": False,
+        "pointlocation": {
+            "type": "Point",
+            "coordinates": [
+                -122.41896,
+                37.80695
+            ]
+        }
     },
     {
         "ban": "0000001",
@@ -33,6 +42,15 @@ SOCRATA_RESPONSE = [
         "mailingaddress": "580 MAIN ST",
         "mailcitystatezip": "SAN FRANCISCO CA 11111",
         "locationnumber": "111",
-        "orgtype": "C-Corp"
+        "orgtype": "C-Corp",
+        "licclasscodes": "D18 D19 D26",
+        "fyfind": False,
+        "pointlocation": {
+            "type": "Point",
+            "coordinates": [
+                -122.400795,
+                37.745224
+            ]
+        }
     }
 ]

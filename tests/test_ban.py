@@ -91,5 +91,5 @@ def test_ban_success(mock_get, mock_env_access_key):
     assert isinstance(resp_json, list)
     assert len(resp_json) == 2
     one_resp = resp_json[0]
-    for prop in ban_map:
+    for prop in ban_map.values():
         assert prop in one_resp
